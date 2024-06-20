@@ -10,8 +10,10 @@ using namespace std;
 int repartirCarta();
 int asignarPalo();
 int asignarEmbaucadora();
-bool chequearCartaRepetida(int cartas[10], int valor);
+int reasignarEmbaucadora(int embaucadoraActual);
 
+bool chequearCartaRepetida(int cartas[10], int valor);
+bool preguntarJugadorCambiarEmbaucadora(string nombreJugador, string embaucadoraActual);
 
 int main (){
     setlocale(LC_ALL, "spanish");
@@ -20,6 +22,8 @@ int main (){
     char confirmacion, salir;
     string jugador1, jugador2, Ganador, GanadorEstadistica;
     int puntajeJugador1, puntajeJugador2, ronda1Jugador1, ronda2Jugador1, ronda3Jugador1, ronda1Jugador2, ronda2Jugador2, ronda3Jugador2, PuntosGanador, PuntosA = 0, PuntosB = 0, PuntosEstadistica = 0;
+
+    bool jugador1CambioCarta = false, jugador2CambioCarta = false;
 
 
 
@@ -146,60 +150,47 @@ int main (){
               cout << "+------------------------------+"<<endl;
               cout << endl;
 
-              if(ronda==1){
+               if(ronda == 1){
                 if(PuntosA >= 20){
-                  cout << jugador1 << " Desea cambiar carta embaucadora por 20 puntos? (S/N) ";
-                  cin >> confirmacion;
-                  if(confirmacion == 'S' || confirmacion == 's'){
-                    PuntosA -= 20;
-                    z = asignarEmbaucadora();
-                    cout << "la nueva carta embaucadora es: " << palo[z] << endl << endl;
-                  }else if(PuntosB >= 20){
-                    cout << jugador2 << " Desea cambiar carta embaucadora por 20 puntos? (S/N) ";
-                    cin >> confirmacion;
-                    if(confirmacion == 'S' || confirmacion == 's'){
-                      PuntosB -= 20;
-                      z = asignarEmbaucadora();
-                      cout << endl << "la nueva carta embaucadora es: " << palo[z] << endl << endl;
+                    jugador1CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador1, palo[z]);
+                    if(jugador1CambioCarta){
+                        PuntosA -= 20;
+                        z = reasignarEmbaucadora(z);
+                        cout << "la nueva carta embaucadora es: " << palo[z] << endl << endl;
                     }
-                  }
-                }else if(PuntosB >= 20){
-                  cout << jugador2 << " Desea cambiar carta embaucadora por 20 puntos? (S/N) ";
-                  cin >> confirmacion;
-                  if(confirmacion == 'S' || confirmacion == 's'){
-                    PuntosB -= 20;
-                    z = asignarEmbaucadora();
-                    cout << "la nueva carta embaucadora es: " << palo[z] << endl << endl;
-                  }
+
                 }
-              }else if (ronda==2){
-                if(PuntosB >= 20){
-                  cout << jugador2 << " Desea cambiar carta embaucadora por 20 puntos? (S/N) ";
-                  cin >> confirmacion;
-                  if(confirmacion == 'S' || confirmacion == 's'){
-                    PuntosB -= 20;
-                    z = asignarEmbaucadora();
-                    cout << "la nueva carta embaucadora es: " << palo[z] << endl << endl;
-                  }else if(PuntosA >= 20){
-                    cout << jugador1 << " Desea cambiar carta embaucadora por 20 puntos? (S/N) ";
-                    cin >> confirmacion;
-                    if(confirmacion == 'S' || confirmacion == 's'){
-                      PuntosA -= 20;
-                      z = asignarEmbaucadora();
-                      cout << endl << "la nueva carta embaucadora es: " << palo[z] << endl << endl;
+                 if(PuntosB >= 20 && jugador1CambioCarta == false){
+                  jugador2CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador2, palo[z]);
+                    if(jugador2CambioCarta){
+                        PuntosB -= 20;
+                        z = reasignarEmbaucadora(z);
+                        cout << "la nueva carta embaucadora es: " << palo[z] << endl << endl;
+
                     }
-                  }
-                }else if(PuntosA >= 20){
-                  cout << jugador1 << " Desea cambiar carta embaucadora por 20 puntos? (S/N) ";
-                  cin >> confirmacion;
-                  if(confirmacion == 'S' || confirmacion == 's'){
-                    PuntosA -= 20;
-                    z = asignarEmbaucadora();
-                    cout << "la nueva carta embaucadora es: " << palo[z] << endl << endl;
-                  }
+                }
+               } else if (ronda == 2){
+                if(PuntosB >= 20){
+                  jugador2CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador2, palo[z]);
+                    if(jugador2CambioCarta){
+                        PuntosB -= 20;
+                        z = reasignarEmbaucadora(z);
+                        cout << "la nueva carta embaucadora es: " << palo[z] << endl << endl;
+
+                    }
+                }
+                 if(PuntosA >= 20 && jugador2CambioCarta == false){
+                    jugador1CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador1, palo[z]);
+                    if(jugador1CambioCarta){
+                        PuntosA -= 20;
+                        z = reasignarEmbaucadora(z);
+                        cout << "la nueva carta embaucadora es: " << palo[z] << endl << endl;
+
+                    }
                 }
               }
 
+              
               for(i=0;i<5;i++){
                 if(cartas[i]/10 != z){
                   totalPuntosA += valordecarta[i];
@@ -341,3 +332,27 @@ bool chequearCartaRepetida(int cartas[10], int valor){
 
   return repetida;
 }
+
+int reasignarEmbaucadora(int embaucadoraActual){
+  int emba = embaucadoraActual;
+  do {
+    emba = rand() % 4;
+  } while(emba == embaucadoraActual);
+  return emba;
+};
+
+bool preguntarJugadorCambiarEmbaucadora(string jugador, string embaucadoraActual){
+    char respuesta;
+    
+    do {
+        cout << jugador + " deseas cambiar la carta embaucadora ? (" + embaucadoraActual + ") ";
+        cin >> respuesta;
+    } while((respuesta != 's' && respuesta != 'S') && (respuesta != 'n' && respuesta != 'N'));
+
+    if(respuesta == 's' | respuesta == 'S'){
+        return true;
+    } else {
+        return false;
+    }
+
+};
