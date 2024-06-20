@@ -21,6 +21,15 @@ int main (){
     string jugador1, jugador2, Ganador, GanadorEstadistica;
     int puntajeJugador1, puntajeJugador2, ronda1Jugador1, ronda2Jugador1, ronda3Jugador1, ronda1Jugador2, ronda2Jugador2, ronda3Jugador2, PuntosGanador, PuntosA = 0, PuntosB = 0, PuntosEstadistica = 0;
 
+
+
+//lo dejamos afuera de todo ya que son valores 'constantes', sino se recrean en cada vuelta del loop
+    string num[5] = {"10", "J", "Q", "K", "A"};
+    string palo[4] = {"Trebol", "Pica", "Corazon", "Diamante"};
+
+    int valores[5] = {10, 11, 12, 15, 20};
+
+
     while(true){
 
         do{
@@ -78,10 +87,11 @@ int main (){
               cout << "RONDA #" << ronda + 1  <<endl;
               cout << jugador1 << " Vs " << jugador2 << endl<<endl;
 
-              string num[5] = {"10", "J", "Q", "K", "A"};
-              string palo[4] = {"Trebol", "Pica", "Corazon", "Diamante"};
-              int valores[5] = {10, 11, 12, 15, 20}, cartas[10], valordecarta[10];
-              int i, totalPuntosA = 0, totalPuntosB = 0, x = repartirCarta(), y = asignarPalo(), copia[10];
+           
+              int cartas[10];
+              int valordecarta[10];
+              int copia[10];
+              int i, x, y, totalPuntosA = 0, totalPuntosB = 0;
 
               srand(time(0)); //semilla o seed
               int z = asignarEmbaucadora();
