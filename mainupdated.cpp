@@ -12,18 +12,14 @@ int asignarPalo();
 int asignarEmbaucadora();
 bool chequearCartaRepetida(int cartas[10], int valor);
 
-string Ganador, GanadorEstadistica;
-int PuntosGanador;
-
-int PuntosA = 0, PuntosB = 0, PuntosEstadistica = 0;
 
 int main (){
     setlocale(LC_ALL, "spanish");
 
     int opcion;
     char confirmacion, salir;
-    string jugador1, jugador2;
-    int puntajeJugador1, puntajeJugador2, ronda1Jugador1, ronda2Jugador1, ronda3Jugador1, ronda1Jugador2, ronda2Jugador2, ronda3Jugador2;
+    string jugador1, jugador2, Ganador, GanadorEstadistica;
+    int puntajeJugador1, puntajeJugador2, ronda1Jugador1, ronda2Jugador1, ronda3Jugador1, ronda1Jugador2, ronda2Jugador2, ronda3Jugador2, PuntosGanador, PuntosA = 0, PuntosB = 0, PuntosEstadistica = 0;
 
     while(true){
 
