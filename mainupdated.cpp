@@ -86,15 +86,23 @@ int main (){
             int puntosronda[3];
             int puntosrondab[3];
             for(int ronda = 0; ronda < 3; ronda ++){
+              
+              jugador1CambioCarta = false;
+              jugador2CambioCarta = false;
 
               cout << "EMBAUCADO" << endl << "----------------------------------------" << endl;
               cout << "RONDA #" << ronda + 1  <<endl;
               cout << jugador1 << " Vs " << jugador2 << endl<<endl;
 
-           
+              //guardamos un calculo que representa unicamente cada carta (valor + palo)
               int cartas[10];
               int valordecarta[10];
-              int copia[10];
+
+              //borrar si no hace falta
+              //int copia[10];
+
+
+              //TENEMOS QUE PONERNOS DE ACUERDO QUE VARIABLE USAMOS PARA EL TOTAL ACUMULADO, Y CUAL PARA LLEVAR EL CONTEO DEL PUNTAJE DE LA RONDA
               int i, x, y, totalPuntosA = 0, totalPuntosB = 0;
 
               srand(time(0)); //semilla o seed
@@ -207,9 +215,15 @@ int main (){
               cout << "----------------------------------------" << endl;
 
               cout << jugador1 << " = " << totalPuntosA << " Puntos";
+              if(jugador1CambioCarta){
+                cout << " (-20)";
+              }
               cout << endl;
 
               cout << jugador2 << " = " << totalPuntosB << " Puntos";
+               if(jugador2CambioCarta){
+                cout << " (-20)";
+              }
               cout << endl;
               cout << endl;
               puntosronda[ronda] = totalPuntosA;
