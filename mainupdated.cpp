@@ -150,6 +150,7 @@ int main (){
               cout << "+------------------------------+"<<endl;
               cout << endl;
 
+              //cambiamos la carta embaucadora
                if(ronda == 1){
                 if(PuntosA >= 20){
                     jugador1CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador1, palo[z]);
@@ -191,12 +192,12 @@ int main (){
               }
 
               
-              for(i=0;i<5;i++){
+              for(int i=0;i<5;i++){
                 if(cartas[i]/10 != z){
                   totalPuntosA += valordecarta[i];
                 }
               }
-              for(i=5;i<10;i++){
+              for(int i=5;i<10;i++){
                 if(cartas[i]/10 != z){
                   totalPuntosB += valordecarta[i];
                 }
@@ -230,6 +231,7 @@ int main (){
             cout << endl << "------------------------------------------------------------------------------------------------------------------------" << endl;
             cout << "TOTAL     " << PuntosA << "     " << PuntosB << endl;
             cout << endl;
+
             if(PuntosA>PuntosB){
                 Ganador = jugador1;
                 PuntosGanador = PuntosA;
@@ -315,6 +317,9 @@ int asignarPalo(){
   pal = rand() % 4;
   return pal;
 }
+
+//para la embaucadora podriamos usar la misma funcion que para asignar el palo
+//al final ambas retornan un numero random del 0 al 3.
 int asignarEmbaucadora(){
   int emba;
   emba = rand() % 4;
