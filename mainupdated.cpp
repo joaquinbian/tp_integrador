@@ -163,7 +163,7 @@ int main (){
                 if(PuntosA >= 20){
                     jugador1CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador1, palo[z]);
                     if(jugador1CambioCarta){
-                        PuntosA -= 20;
+                        //PuntosA -= 20;
                         z = reasignarEmbaucadora(z);
                         cout << "la nueva carta embaucadora es: " << palo[z] << endl << endl;
                     }
@@ -172,7 +172,7 @@ int main (){
                  if(PuntosB >= 20 && jugador1CambioCarta == false){
                   jugador2CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador2, palo[z]);
                     if(jugador2CambioCarta){
-                        PuntosB -= 20;
+                      //  PuntosB -= 20;
                         z = reasignarEmbaucadora(z);
                         cout << "la nueva carta embaucadora es: " << palo[z] << endl << endl;
 
@@ -182,7 +182,7 @@ int main (){
                 if(PuntosB >= 20){
                   jugador2CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador2, palo[z]);
                     if(jugador2CambioCarta){
-                        PuntosB -= 20;
+                        //PuntosB -= 20;
                         z = reasignarEmbaucadora(z);
                         cout << "la nueva carta embaucadora es: " << palo[z] << endl << endl;
 
@@ -191,7 +191,7 @@ int main (){
                  if(PuntosA >= 20 && jugador2CambioCarta == false){
                     jugador1CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador1, palo[z]);
                     if(jugador1CambioCarta){
-                        PuntosA -= 20;
+                      //  PuntosA -= 20;
                         z = reasignarEmbaucadora(z);
                         cout << "la nueva carta embaucadora es: " << palo[z] << endl << endl;
 
@@ -217,12 +217,14 @@ int main (){
               cout << jugador1 << " = " << totalPuntosA << " Puntos";
               if(jugador1CambioCarta){
                 cout << " (-20)";
+                totalPuntosA -= 20;
               }
               cout << endl;
 
               cout << jugador2 << " = " << totalPuntosB << " Puntos";
                if(jugador2CambioCarta){
                 cout << " (-20)";
+                totalPuntosB -= 20;
               }
               cout << endl;
               cout << endl;
