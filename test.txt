@@ -1,8 +1,0 @@
-cartasJugador1 = [0 10, 20, 30, 40]
-palosJ1 = [Pica, Trebol, Corazon, Trebol, Diamante]
-
-cartasJugador2 = [10, 10, 30, 0, 40]
-palosJ2 = [Trebol, Diamante, Corazon, Corazon, Trebol]
-
-
-Carta embaucadora = Trebol
