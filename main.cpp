@@ -16,7 +16,8 @@ bool preguntarJugadorCambiarEmbaucadora(string nombreJugador);
 int main (){
     setlocale(LC_ALL, "spanish");
 
-    int OpcionElegida, PaloEmbaucadora, puntajeJugador1, puntajeJugador2, PuntosGanador, PuntosJugador1 = 0, PuntosJugador2 = 0, PuntosEstadistica = 0;
+    int max_jugador1, max_jugador2, bandera_max_jugador1 = 0, bandera_max_jugador2 = 0;
+    int OpcionElegida, PaloEmbaucadora, PuntosGanador, TotalPuntosJugador1 = 0, TotalPuntosJugador2 = 0, PuntosEstadistica = 0;
     char confirmacion, salir;
     string jugador1, jugador2, Ganador, GanadorConMejorPuntaje;
     bool jugador1CambioCarta = false, jugador2CambioCarta = false;
@@ -72,8 +73,7 @@ int main (){
             }
              system ("cls") ;
 
-            int PuntosPorRondaJugador1[3];
-            int PuntosPorRondaJugador2[3];
+            int PuntosPorRondaJugador1[3], PuntosPorRondaJugador2[3];
             for(int ronda = 0; ronda < 3; ronda++){
 
               jugador1CambioCarta = false;
@@ -83,11 +83,7 @@ int main (){
               cout << endl << "RONDA #" << ronda + 1  <<endl;
               cout << jugador1 << " Vs " << jugador2 << endl<<endl;
 
-              int cartas[10];
-              int valordecarta[10];
-
-
-              int i,  IndiceCarta, PaloAsignado, totalPuntosA = 0, totalPuntosB = 0;
+              int cartas[10], valordecarta[10], i,  ValorONumeroAsignado, PaloAsignado, PuntosJugador1 = 0, PuntosJugador2 = 0;
 
               srand(time(0));
 
@@ -99,65 +95,63 @@ int main (){
 
               cout << "+------------------------------+"<< endl;
               cout << "|                              |"<< endl;
-              cout << "|  " << jugador1 << " (PUNTOS " << PuntosJugador1 << ")" << string(30 - 3 - jugador1.length() - 9 - to_string(PuntosJugador1).length(), ' ') << "|" << endl;
+              cout << "|  " << jugador1 << " (PUNTOS " << TotalPuntosJugador1 << ")" << string(30 - 3 - jugador1.length() - 9 - to_string(TotalPuntosJugador1).length(), ' ') << "|" << endl;
 
               for(int i=0;i<5;i++){
-                IndiceCarta = FuncionNumAleatorioParaValorONumero();
+                ValorONumeroAsignado = FuncionNumAleatorioParaValorONumero();
                 PaloAsignado = FuncionNumAleatorioParaPalo();
-                int cartaNueva = PaloAsignado * 10 + IndiceCarta;
+                int cartaNueva = PaloAsignado * 10 + ValorONumeroAsignado;
                 bool repetida = chequearCartaRepetida(cartas, cartaNueva);
 
                 while(repetida == true){
-                  IndiceCarta = FuncionNumAleatorioParaValorONumero();
+                  ValorONumeroAsignado = FuncionNumAleatorioParaValorONumero();
                   PaloAsignado = FuncionNumAleatorioParaPalo();
-                  cartaNueva = PaloAsignado * 10 + IndiceCarta;
+                  cartaNueva = PaloAsignado * 10 + ValorONumeroAsignado;
                   repetida = chequearCartaRepetida(cartas, cartaNueva);
                 }
 
                 cartas[i]= cartaNueva;
-                valordecarta[i] = ValorDeCarta[IndiceCarta];
+                valordecarta[i] = ValorDeCarta[ValorONumeroAsignado];
 
-                int numEspacios = 20 - PaloDeCarta[PaloAsignado].length()- NumeroDeCarta[IndiceCarta].length();
-
-                cout << "|     "<< NumeroDeCarta[IndiceCarta] << " de " << PaloDeCarta[PaloAsignado] <<string(numEspacios, ' ')<< " |"<<endl;
-
+                int numEspacios = 20 - PaloDeCarta[PaloAsignado].length()- NumeroDeCarta[ValorONumeroAsignado].length();
+                
+                cout << "|     "<< NumeroDeCarta[ValorONumeroAsignado] << " de " << PaloDeCarta[PaloAsignado] <<string(numEspacios, ' ')<< " |"<<endl;
               }
 
               cout << "|                              |" << endl;
-              cout << "|  " << jugador2 << " (PUNTOS " << PuntosJugador2 << ")" << string(30 - 3 - jugador2.length() - 9 - to_string(PuntosJugador2).length(), ' ') << "|"<< endl;
-
+              cout << "|  " << jugador2 << " (PUNTOS " << TotalPuntosJugador2 << ")" << string(30 - 3 - jugador2.length() - 9 - to_string(TotalPuntosJugador2).length(), ' ') << "|"<< endl;
 
               for(int i=5;i<10;i++){
-                IndiceCarta = FuncionNumAleatorioParaValorONumero();
+                ValorONumeroAsignado = FuncionNumAleatorioParaValorONumero();
                 PaloAsignado = FuncionNumAleatorioParaPalo();
-                int cartaNueva = PaloAsignado * 10 + IndiceCarta;
+                int cartaNueva = PaloAsignado * 10 + ValorONumeroAsignado;
                 bool repetida = chequearCartaRepetida(cartas, cartaNueva);
 
                 while(repetida == true){
-                  IndiceCarta = FuncionNumAleatorioParaValorONumero();
+                  ValorONumeroAsignado = FuncionNumAleatorioParaValorONumero();
                   PaloAsignado = FuncionNumAleatorioParaPalo();
-                  cartaNueva = PaloAsignado * 10 + IndiceCarta;
+                  cartaNueva = PaloAsignado * 10 + ValorONumeroAsignado;
                   repetida = chequearCartaRepetida(cartas, cartaNueva);
                 }
 
                 cartas[i] = cartaNueva;
-                valordecarta[i] = ValorDeCarta[IndiceCarta];
+                valordecarta[i] = ValorDeCarta[ValorONumeroAsignado];
 
-                int numEspacios = 20 - PaloDeCarta[PaloAsignado].length()- NumeroDeCarta[IndiceCarta].length();
+                int numEspacios = 20 - PaloDeCarta[PaloAsignado].length()- NumeroDeCarta[ValorONumeroAsignado].length();
 
-                cout << "|     "<< NumeroDeCarta[IndiceCarta] << " de " << PaloDeCarta[PaloAsignado] <<string(numEspacios, ' ')<< " |"<<endl;
+                cout << "|     "<< NumeroDeCarta[ValorONumeroAsignado] << " de " << PaloDeCarta[PaloAsignado] <<string(numEspacios, ' ')<< " |"<<endl;
 
 
               }
               cout << "|                              |" << endl;
-             cout << "|   Embaucadora: " << PaloDeCarta[PaloEmbaucadora]<< string(13 - PaloDeCarta[PaloEmbaucadora].length(), ' ') << " |" << endl;
+              cout << "|   Embaucadora: " << PaloDeCarta[PaloEmbaucadora]<< string(13 - PaloDeCarta[PaloEmbaucadora].length(), ' ') << " |" << endl;
               cout << "|                              |" << endl;
               cout << "+------------------------------+"<<endl;
               cout << endl;
 
-              //cambiamos la carta embaucadora
+
                if(ronda == 1){
-                if(PuntosJugador1 >= 20){
+                if(TotalPuntosJugador1 >= 20){
                     jugador1CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador1);
                     if(jugador1CambioCarta){
                         PaloEmbaucadora = reasignarEmbaucadora(PaloEmbaucadora);
@@ -168,21 +162,21 @@ int main (){
                     cout << jugador1 << " no posee los puntos suficientes para cambiar la carta embaucadora" << endl;
 
                 }
-                 if(PuntosJugador2 >= 20 && jugador1CambioCarta == false){
+                 if(TotalPuntosJugador2 >= 20 && jugador1CambioCarta == false){
                   jugador2CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador2);
                     if(jugador2CambioCarta){
                         PaloEmbaucadora = reasignarEmbaucadora(PaloEmbaucadora);
                         cout << endl << "La nueva carta embaucadora es: " << PaloDeCarta[PaloEmbaucadora] << endl << endl;
 
                     }
-                } else if(PuntosJugador2 < 20){
+                } else if(TotalPuntosJugador2 < 20){
                    cout << jugador2 << " no posee los puntos suficientes para cambiar la carta embaucadora" << endl;
                 }
 
                }
 
                 if (ronda == 2){
-                  if(PuntosJugador2 >= 20){
+                  if(TotalPuntosJugador2 >= 20){
                     jugador2CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador2);
                       if(jugador2CambioCarta){
                         PaloEmbaucadora = reasignarEmbaucadora(PaloEmbaucadora);
@@ -193,60 +187,57 @@ int main (){
                   cout << jugador2 << " no posee los puntos suficientes para cambiar la carta embaucadora" << endl;
                 }
 
-                 if(PuntosJugador1 >= 20 && jugador2CambioCarta == false){
+                 if(TotalPuntosJugador1 >= 20 && jugador2CambioCarta == false){
                     jugador1CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador1);
                     if(jugador1CambioCarta){
                         PaloEmbaucadora = reasignarEmbaucadora(PaloEmbaucadora);
                         cout << endl << "La nueva carta embaucadora es: " << PaloDeCarta[PaloEmbaucadora] << endl << endl;
 
                     }
-                } else if(PuntosJugador1 < 20){
+                } else if(TotalPuntosJugador1 < 20){
                    cout << jugador1 << " no posee los puntos suficientes para cambiar la carta embaucadora" << endl;
                 }
               }
 
-
-              //se calcula el puntaje de jugador1 en la ronda
               for(int i=0;i<5;i++){
                 if(cartas[i]/10 != PaloEmbaucadora){
-                  totalPuntosA += valordecarta[i];
+                  PuntosJugador1 += valordecarta[i];
                 }
               }
 
-              //se calcula el puntaje de jugador2 en la ronda
               for(int i=5;i<10;i++){
                 if(cartas[i]/10 != PaloEmbaucadora){
-                  totalPuntosB += valordecarta[i];
+                  PuntosJugador2 += valordecarta[i];
                 }
               }
 
              cout << "+------------------+" << endl << "|PUNTAJES OBTENIDOS|" << endl << "+------------------+" << endl;
 
               if(jugador1CambioCarta){
-              totalPuntosA -= 20;
-             cout << jugador1 << " cambió la carta embaucadora, suma en esta ronda: " << totalPuntosA << " Puntos";
+              PuntosJugador1 -= 20;
+             cout << endl << jugador1 << " cambió la carta embaucadora, suma en esta ronda: " << PuntosJugador1 << " Puntos";
               }
               else{
-              cout << jugador1 << " suma en esta ronda: " << totalPuntosA << " Puntos";
+              cout << endl << jugador1 << " suma en esta ronda: " << PuntosJugador1 << " Puntos";
               }
               cout << endl;
 
               if(jugador2CambioCarta){
-              totalPuntosB -= 20;
-             cout << jugador2 << " cambió la carta embaucadora, suma en esta ronda: " << totalPuntosB << " Puntos";
+              PuntosJugador2 -= 20;
+             cout << jugador2 << " cambió la carta embaucadora, suma en esta ronda: " << PuntosJugador2 << " Puntos";
               }
               else{
-              cout << jugador2 << " suma en esta ronda: " << totalPuntosB << " Puntos";
+              cout << jugador2 << " suma en esta ronda: " << PuntosJugador2 << " Puntos";
               }
               cout << endl;
 
 
               cout << endl;
               cout << endl;
-              PuntosPorRondaJugador1[ronda] = totalPuntosA;
-              PuntosPorRondaJugador2[ronda] = totalPuntosB;
-              PuntosJugador1 += totalPuntosA;
-              PuntosJugador2 += totalPuntosB;
+              PuntosPorRondaJugador1[ronda] = PuntosJugador1;
+              PuntosPorRondaJugador2[ronda] = PuntosJugador2;
+              TotalPuntosJugador1 += PuntosJugador1;
+              TotalPuntosJugador2 += PuntosJugador2;
 
               system ("pause");
               system ("cls") ;
@@ -260,16 +251,42 @@ int main (){
             cout << "| 2        " << PuntosPorRondaJugador1[1] << "          " << PuntosPorRondaJugador2[1] << " |" << endl;
             cout << "| 3        " << PuntosPorRondaJugador1[2] << "          " << PuntosPorRondaJugador2[2] << " |" ;
             cout << endl << "+-------------------------+" << endl;
-            cout << "TOTAL     " << PuntosJugador1 << "          " << PuntosJugador2 << endl;
+            cout << "TOTAL     " << TotalPuntosJugador1 << "          " << TotalPuntosJugador2 << endl;
             cout << endl;
 
-            if(PuntosJugador1>PuntosJugador2){
-                Ganador = jugador1;
-                PuntosGanador = PuntosJugador1;
-            } else {
-              Ganador = jugador2;
-              PuntosGanador = PuntosJugador2;
+            for(int x = 0; x < 3; x++){
+                if(bandera_max_jugador1 == 0){
+                    max_jugador1 = PuntosPorRondaJugador1[x];
+                    bandera_max_jugador1 = 1;
+                }else if(PuntosPorRondaJugador1[x] > max_jugador1){
+                    max_jugador1 = PuntosPorRondaJugador1[x];
+                }
             }
+            for(int x = 0; x < 3; x++){
+              if(bandera_max_jugador2 == 0){
+                    max_jugador2 = PuntosPorRondaJugador2[x];
+                    bandera_max_jugador2 = 1;
+                }else if(PuntosPorRondaJugador2[x] > max_jugador2){
+                    max_jugador2 = PuntosPorRondaJugador2[x];
+                }
+            }
+
+            if(TotalPuntosJugador1 > TotalPuntosJugador2){
+                Ganador = jugador1;
+                PuntosGanador = TotalPuntosJugador1;
+            } else if(TotalPuntosJugador2 > TotalPuntosJugador1){
+              Ganador = jugador2;
+              PuntosGanador = TotalPuntosJugador2;
+            } else{
+               if(max_jugador1 > max_jugador2){
+                    Ganador = jugador1;
+               }else if(max_jugador2 > max_jugador1){
+                    Ganador = jugador2;
+               }else{
+                    cout << "El juego termina en empate, no hubo ganadores " << endl;
+               }
+            }
+
             cout << "GANADOR: " << Ganador << " con " << PuntosGanador << " puntos" << endl;
 
             if(PuntosEstadistica == 0) {
@@ -283,8 +300,8 @@ int main (){
             }
 
             cout << endl;
-            PuntosJugador1 = 0;
-            PuntosJugador2 = 0;
+            TotalPuntosJugador1 = 0;
+            TotalPuntosJugador2 = 0;
             Ganador = "";
             PuntosGanador = 0;
 
@@ -295,7 +312,10 @@ int main (){
         case 2:
              system ("cls") ;
              if (PuntosEstadistica <= 0)  {
-                    cout << "NO SE REGISTRARON PARTIDAS JUGADAS." << endl << endl;  }
+                    cout << "+-------------------------------------+" <<endl;
+                    cout << "| NO SE REGISTRARON PARTIDAS JUGADAS  |" << endl;
+                    cout << "+-------------------------------------+" << endl;
+             }
              else  {
              cout << "EL MAYOR GANADOR HASTA EL MOMENTO ES " << GanadorConMejorPuntaje << " CON " << PuntosEstadistica << " PUNTOS" << endl; }
 
