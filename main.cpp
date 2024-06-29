@@ -7,11 +7,16 @@
 
 using namespace std;
 
-int FuncionNumAleatorioParaValorONumero();
-int FuncionNumAleatorioParaPalo();
-int reasignarEmbaucadora(int embaucadoraActual);
-bool chequearCartaRepetida(int cartas[10], int valor);
 bool preguntarJugadorCambiarEmbaucadora(string nombreJugador);
+
+//funciones nuevas
+string obtenerPalo(int indice);
+int obtenerIndiceCarta();
+string reasignarPaloEmbaucadora(string embaucadoraActual);
+bool cartaPuedeSumarPuntos(int indiceCarta, string embaucadora);
+void resetearCheckList(bool checkList[20]);
+int repartirCarta(bool checkList[20]);
+
 
 int main (){
     setlocale(LC_ALL, "spanish");
@@ -19,11 +24,17 @@ int main (){
     int max_jugador1, max_jugador2, bandera_max_jugador1 = 0, bandera_max_jugador2 = 0;
     int OpcionElegida, PaloEmbaucadora, PuntosGanador, TotalPuntosJugador1 = 0, TotalPuntosJugador2 = 0, PuntosEstadistica = 0;
     char confirmacion, salir;
-    string jugador1, jugador2, Ganador, GanadorConMejorPuntaje;
+    string jugador1, jugador2, Ganador, paloEmbaucadora, GanadorConMejorPuntaje;
     bool jugador1CambioCarta = false, jugador2CambioCarta = false;
-    string PaloDeCarta[4] = {"Trebol", "Pica", "Corazon", "Diamante"};
-    string NumeroDeCarta[5] = {"10", "J", "Q", "K", "A"};
-    int ValorDeCarta[5] = {10, 11, 12, 15, 20};
+
+    //en base a este vector sabemos que carta seleciconamos
+    bool checkList[20] = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
+
+    //cartas     
+    string cards[20] = {"10 de Trebol", "J de Trebol", "Q de Trebol", "K de Trebol", "A de Trebol", "10 de Pica", "J de Pica", "Q de Pica", "K de Pica", "A de Pica", "10 de Corazon", "J de Corazon", "Q de Corazon", "K de Corazon", "A de Corazon", "10 de Diamante", "J de Diamante", "Q de Diamante", "K de Diamante", "A de Diamante"};
+
+    //valores
+    int cardPoints[20] = {10, 11, 12, 15, 20, 10, 11, 12, 15, 20, 10, 11, 12, 15, 20, 10, 11, 12, 15, 20};
 
     while(true){
         do{
@@ -74,23 +85,25 @@ int main (){
              system ("cls") ;
 
             int PuntosPorRondaJugador1[3], PuntosPorRondaJugador2[3];
+
             for(int ronda = 0; ronda < 3; ronda++){
 
               jugador1CambioCarta = false;
               jugador2CambioCarta = false;
+              resetearCheckList(checkList);
 
               cout << "+-------------------+" << endl << "|     EMBAUCADO     |" << endl << "+-------------------+" << endl;
               cout << endl << "RONDA #" << ronda + 1  <<endl;
               cout << jugador1 << " Vs " << jugador2 << endl<<endl;
 
-              int cartas[10], valordecarta[10], i,  ValorONumeroAsignado, PaloAsignado, PuntosJugador1 = 0, PuntosJugador2 = 0;
+              int cartas[10], valordecarta[10], PuntosJugador1 = 0, PuntosJugador2 = 0;
 
               srand(time(0));
 
               if(ronda == 0){
-                PaloEmbaucadora = FuncionNumAleatorioParaPalo();
+                paloEmbaucadora = obtenerPalo(obtenerIndiceCarta());
               } else {
-                PaloEmbaucadora = reasignarEmbaucadora(PaloEmbaucadora);
+                paloEmbaucadora = reasignarPaloEmbaucadora(paloEmbaucadora);
               }
 
               cout << "+------------------------------+"<< endl;
@@ -98,53 +111,39 @@ int main (){
               cout << "|  " << jugador1 << " (PUNTOS " << TotalPuntosJugador1 << ")" << string(30 - 3 - jugador1.length() - 9 - to_string(TotalPuntosJugador1).length(), ' ') << "|" << endl;
 
               for(int i=0;i<5;i++){
-                ValorONumeroAsignado = FuncionNumAleatorioParaValorONumero();
-                PaloAsignado = FuncionNumAleatorioParaPalo();
-                int cartaNueva = PaloAsignado * 10 + ValorONumeroAsignado;
-                bool repetida = chequearCartaRepetida(cartas, cartaNueva);
+                int indiceCarta = repartirCarta(checkList);
 
-                while(repetida == true){
-                  ValorONumeroAsignado = FuncionNumAleatorioParaValorONumero();
-                  PaloAsignado = FuncionNumAleatorioParaPalo();
-                  cartaNueva = PaloAsignado * 10 + ValorONumeroAsignado;
-                  repetida = chequearCartaRepetida(cartas, cartaNueva);
-                }
+                checkList[indiceCarta] = true;
+                cartas[i] = indiceCarta;
+                valordecarta[i] = cardPoints[indiceCarta];
 
-                cartas[i]= cartaNueva;
-                valordecarta[i] = ValorDeCarta[ValorONumeroAsignado];
+                int numEspacios = 20 - cards[indiceCarta].length();
 
-                int numEspacios = 20 - PaloDeCarta[PaloAsignado].length()- NumeroDeCarta[ValorONumeroAsignado].length();
                 
-                cout << "|     "<< NumeroDeCarta[ValorONumeroAsignado] << " de " << PaloDeCarta[PaloAsignado] <<string(numEspacios, ' ')<< " |"<<endl;
+                cout << "|     "<< cards[indiceCarta] <<string(numEspacios, ' ')<< " |"<<endl;
               }
 
               cout << "|                              |" << endl;
               cout << "|  " << jugador2 << " (PUNTOS " << TotalPuntosJugador2 << ")" << string(30 - 3 - jugador2.length() - 9 - to_string(TotalPuntosJugador2).length(), ' ') << "|"<< endl;
 
               for(int i=5;i<10;i++){
-                ValorONumeroAsignado = FuncionNumAleatorioParaValorONumero();
-                PaloAsignado = FuncionNumAleatorioParaPalo();
-                int cartaNueva = PaloAsignado * 10 + ValorONumeroAsignado;
-                bool repetida = chequearCartaRepetida(cartas, cartaNueva);
+                int indiceCarta = repartirCarta(checkList);
 
-                while(repetida == true){
-                  ValorONumeroAsignado = FuncionNumAleatorioParaValorONumero();
-                  PaloAsignado = FuncionNumAleatorioParaPalo();
-                  cartaNueva = PaloAsignado * 10 + ValorONumeroAsignado;
-                  repetida = chequearCartaRepetida(cartas, cartaNueva);
-                }
+                checkList[indiceCarta] = true;
+                cartas[i] = indiceCarta;
+                valordecarta[i] = cardPoints[indiceCarta];
 
-                cartas[i] = cartaNueva;
-                valordecarta[i] = ValorDeCarta[ValorONumeroAsignado];
+                
 
-                int numEspacios = 20 - PaloDeCarta[PaloAsignado].length()- NumeroDeCarta[ValorONumeroAsignado].length();
 
-                cout << "|     "<< NumeroDeCarta[ValorONumeroAsignado] << " de " << PaloDeCarta[PaloAsignado] <<string(numEspacios, ' ')<< " |"<<endl;
+                int numEspacios = 20 - cards[indiceCarta].length();
+                
+                cout << "|     "<< cards[indiceCarta] <<string(numEspacios, ' ')<< " |"<<endl;
 
 
               }
               cout << "|                              |" << endl;
-              cout << "|   Embaucadora: " << PaloDeCarta[PaloEmbaucadora]<< string(13 - PaloDeCarta[PaloEmbaucadora].length(), ' ') << " |" << endl;
+              cout << "|   Embaucadora: " << paloEmbaucadora << string(13 - paloEmbaucadora.length(), ' ') << " |" << endl;
               cout << "|                              |" << endl;
               cout << "+------------------------------+"<<endl;
               cout << endl;
@@ -154,8 +153,8 @@ int main (){
                 if(TotalPuntosJugador1 >= 20){
                     jugador1CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador1);
                     if(jugador1CambioCarta){
-                        PaloEmbaucadora = reasignarEmbaucadora(PaloEmbaucadora);
-                        cout << endl << "La nueva carta embaucadora es: " << PaloDeCarta[PaloEmbaucadora] << endl << endl ;
+                        paloEmbaucadora = reasignarPaloEmbaucadora(paloEmbaucadora);
+                        cout << endl << "La nueva carta embaucadora es: " << paloEmbaucadora << endl << endl ;
                     }
 
                 } else {
@@ -165,8 +164,8 @@ int main (){
                  if(TotalPuntosJugador2 >= 20 && jugador1CambioCarta == false){
                   jugador2CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador2);
                     if(jugador2CambioCarta){
-                        PaloEmbaucadora = reasignarEmbaucadora(PaloEmbaucadora);
-                        cout << endl << "La nueva carta embaucadora es: " << PaloDeCarta[PaloEmbaucadora] << endl << endl;
+                        paloEmbaucadora = reasignarPaloEmbaucadora(paloEmbaucadora);
+                        cout << endl << "La nueva carta embaucadora es: " << paloEmbaucadora << endl << endl;
 
                     }
                 } else if(TotalPuntosJugador2 < 20){
@@ -179,8 +178,8 @@ int main (){
                   if(TotalPuntosJugador2 >= 20){
                     jugador2CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador2);
                       if(jugador2CambioCarta){
-                        PaloEmbaucadora = reasignarEmbaucadora(PaloEmbaucadora);
-                        cout << endl << "La nueva carta embaucadora es: " << PaloDeCarta[PaloEmbaucadora] << endl << endl;
+                        paloEmbaucadora = reasignarPaloEmbaucadora(paloEmbaucadora);
+                        cout << endl << "La nueva carta embaucadora es: " << paloEmbaucadora << endl << endl;
 
                     }
                 } else {
@@ -190,8 +189,8 @@ int main (){
                  if(TotalPuntosJugador1 >= 20 && jugador2CambioCarta == false){
                     jugador1CambioCarta = preguntarJugadorCambiarEmbaucadora(jugador1);
                     if(jugador1CambioCarta){
-                        PaloEmbaucadora = reasignarEmbaucadora(PaloEmbaucadora);
-                        cout << endl << "La nueva carta embaucadora es: " << PaloDeCarta[PaloEmbaucadora] << endl << endl;
+                        paloEmbaucadora = reasignarPaloEmbaucadora(paloEmbaucadora);
+                        cout << endl << "La nueva carta embaucadora es: " << paloEmbaucadora << endl << endl;
 
                     }
                 } else if(TotalPuntosJugador1 < 20){
@@ -200,13 +199,13 @@ int main (){
               }
 
               for(int i=0;i<5;i++){
-                if(cartas[i]/10 != PaloEmbaucadora){
+                if(cartaPuedeSumarPuntos(cartas[i], paloEmbaucadora)){
                   PuntosJugador1 += valordecarta[i];
                 }
               }
 
               for(int i=5;i<10;i++){
-                if(cartas[i]/10 != PaloEmbaucadora){
+                if(cartaPuedeSumarPuntos(cartas[i], paloEmbaucadora)){
                   PuntosJugador2 += valordecarta[i];
                 }
               }
@@ -357,31 +356,7 @@ int main (){
     }
 }
 
-int FuncionNumAleatorioParaValorONumero(){
-  return rand() % 5;
-}
-int FuncionNumAleatorioParaPalo(){
-  return rand() % 4;
-}
 
-bool chequearCartaRepetida(int cartas[10], int valor){
-  bool repetida = false;
-  for (int i = 0; i < 10; i++){
-    if(cartas[i] == valor){
-      repetida = true;
-      break;
-    }
-  }
-  return repetida;
-}
-
-int reasignarEmbaucadora(int embaucadoraActual){
-  int emba = embaucadoraActual;
-  do {
-    emba = rand() % 4;
-  } while(emba == embaucadoraActual);
-  return emba;
-};
 
 bool preguntarJugadorCambiarEmbaucadora(string jugador){
     char respuesta;
@@ -395,3 +370,63 @@ bool preguntarJugadorCambiarEmbaucadora(string jugador){
         return false;
     }
 }
+
+string obtenerPalo(int indice){
+  string palo;
+  //trebol, pica, corazon, diamante
+  if(indice >= 0 && indice <= 4){
+    palo = "Trebol";
+  } else if(indice >= 5 && indice <= 9){
+    palo = "Pica";
+  } else if(indice >= 10 && indice <= 14){
+    palo = "Corazon";
+  } else {
+    palo = "Diamante";
+  } 
+
+  return palo;
+}
+
+int obtenerIndiceCarta(){
+  return rand() % 20;
+}
+
+string reasignarPaloEmbaucadora(string embaucadoraActual){
+  string embaucadoraNueva;
+
+  do{
+    embaucadoraNueva = obtenerPalo(obtenerIndiceCarta());
+  } while(embaucadoraNueva == embaucadoraActual);
+
+  return embaucadoraNueva;
+}
+
+
+bool cartaPuedeSumarPuntos(int indiceCarta, string embaucadora){
+  string paloCarta = obtenerPalo(indiceCarta);
+  if(paloCarta == embaucadora){
+    return false;
+  } else {
+    return true;
+  }
+}
+
+
+void resetearCheckList(bool checkList[20]){
+  for(int i = 0; i < 20; i++){
+    if(checkList[i]){
+      checkList[i] = false;
+    }
+  }
+}
+
+
+int repartirCarta(bool checkList[20]){
+  int indiceCarta;
+    do {
+          indiceCarta = obtenerIndiceCarta();
+        }while(checkList[indiceCarta]);
+
+    return indiceCarta;
+}
+
