@@ -10,7 +10,7 @@ using namespace std;
 bool preguntarJugadorCambiarEmbaucadora(string nombreJugador);
 
 //funciones nuevas
-string obtenerPalo(int indice);
+string obtenerPaloDeCarta(int indice);
 int obtenerIndiceCarta();
 string reasignarPaloEmbaucadora(string embaucadoraActual);
 bool cartaPuedeSumarPuntos(int indiceCarta, string embaucadora);
@@ -101,7 +101,7 @@ int main (){
               srand(time(0));
 
               if(ronda == 0){
-                paloEmbaucadora = obtenerPalo(obtenerIndiceCarta());
+                paloEmbaucadora = obtenerPaloDeCarta(obtenerIndiceCarta());
               } else {
                 paloEmbaucadora = reasignarPaloEmbaucadora(paloEmbaucadora);
               }
@@ -113,8 +113,13 @@ int main (){
               for(int i=0;i<5;i++){
                 int indiceCarta = repartirCarta(checkList);
 
+                //pasa a true para indicar que se selecicono la carta
                 checkList[indiceCarta] = true;
+                
+                //se guarda el indice de la carta que seleccionamos para luego calcular de que palo es
                 cartas[i] = indiceCarta;
+
+                //se guarda el valor de la carta
                 valordecarta[i] = cardPoints[indiceCarta];
 
                 int numEspacios = 20 - cards[indiceCarta].length();
@@ -371,14 +376,14 @@ bool preguntarJugadorCambiarEmbaucadora(string jugador){
     }
 }
 
-string obtenerPalo(int indice){
+string obtenerPaloDeCarta(int indiceCarta){
   string palo;
   //trebol, pica, corazon, diamante
-  if(indice >= 0 && indice <= 4){
+  if(indiceCarta >= 0 && indiceCarta <= 4){
     palo = "Trebol";
-  } else if(indice >= 5 && indice <= 9){
+  } else if(indiceCarta >= 5 && indiceCarta <= 9){
     palo = "Pica";
-  } else if(indice >= 10 && indice <= 14){
+  } else if(indiceCarta >= 10 && indiceCarta <= 14){
     palo = "Corazon";
   } else {
     palo = "Diamante";
@@ -395,7 +400,7 @@ string reasignarPaloEmbaucadora(string embaucadoraActual){
   string embaucadoraNueva;
 
   do{
-    embaucadoraNueva = obtenerPalo(obtenerIndiceCarta());
+    embaucadoraNueva = obtenerPaloDeCarta(obtenerIndiceCarta());
   } while(embaucadoraNueva == embaucadoraActual);
 
   return embaucadoraNueva;
@@ -403,7 +408,7 @@ string reasignarPaloEmbaucadora(string embaucadoraActual){
 
 
 bool cartaPuedeSumarPuntos(int indiceCarta, string embaucadora){
-  string paloCarta = obtenerPalo(indiceCarta);
+  string paloCarta = obtenerPaloDeCarta(indiceCarta);
   if(paloCarta == embaucadora){
     return false;
   } else {
