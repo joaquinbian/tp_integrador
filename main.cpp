@@ -16,7 +16,7 @@ string reasignarPaloEmbaucadora(string embaucadoraActual);
 bool cartaPuedeSumarPuntos(int indiceCarta, string embaucadora);
 void resetearCheckList(bool checkList[20]);
 int repartirCarta(bool checkList[20]);
-
+int asignarCarta(bool checkList[20], int cartas[10], int cardPoints[20], int valorDeCarta[10], int indice);
 
 int main (){
     setlocale(LC_ALL, "spanish");
@@ -111,18 +111,10 @@ int main (){
               cout << "|  " << jugador1 << " (PUNTOS " << TotalPuntosJugador1 << ")" << string(30 - 3 - jugador1.length() - 9 - to_string(TotalPuntosJugador1).length(), ' ') << "|" << endl;
 
               for(int i=0;i<5;i++){
-                int indiceCarta = repartirCarta(checkList);
+               
+                int indiceCarta = asignarCarta(checkList, cartas, cardPoints, valordecarta, i);
 
-                //pasa a true para indicar que se selecicono la carta
-                checkList[indiceCarta] = true;
-                
-                //se guarda el indice de la carta que seleccionamos para luego calcular de que palo es
-                cartas[i] = indiceCarta;
-
-                //se guarda el valor de la carta
-                valordecarta[i] = cardPoints[indiceCarta];
-
-                int numEspacios = 20 - cards[indiceCarta].length();
+                int numEspacios = 24 - cards[indiceCarta].length();
 
                 
                 cout << "|     "<< cards[indiceCarta] <<string(numEspacios, ' ')<< " |"<<endl;
@@ -132,16 +124,11 @@ int main (){
               cout << "|  " << jugador2 << " (PUNTOS " << TotalPuntosJugador2 << ")" << string(30 - 3 - jugador2.length() - 9 - to_string(TotalPuntosJugador2).length(), ' ') << "|"<< endl;
 
               for(int i=5;i<10;i++){
-                int indiceCarta = repartirCarta(checkList);
-
-                checkList[indiceCarta] = true;
-                cartas[i] = indiceCarta;
-                valordecarta[i] = cardPoints[indiceCarta];
-
-                
 
 
-                int numEspacios = 20 - cards[indiceCarta].length();
+                int indiceCarta = asignarCarta(checkList, cartas, cardPoints, valordecarta, i);
+
+                int numEspacios = 24 - cards[indiceCarta].length();
                 
                 cout << "|     "<< cards[indiceCarta] <<string(numEspacios, ' ')<< " |"<<endl;
 
@@ -435,3 +422,18 @@ int repartirCarta(bool checkList[20]){
     return indiceCarta;
 }
 
+int asignarCarta(bool checkList[20], int cartas[10], int cardPoints[20], int valorDeCarta[10], int indice){
+  int indiceCarta = repartirCarta(checkList);
+
+  //pasa a true para indicar que se selecicono la carta
+  checkList[indiceCarta] = true;
+  
+  //se guarda el indice de la carta que seleccionamos para luego calcular de que palo es
+  cartas[indice] = indiceCarta;
+
+  //se guarda el valor de la carta
+  valorDeCarta[indice] = cardPoints[indiceCarta];
+
+
+  return indiceCarta;
+}
